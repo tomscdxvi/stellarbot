@@ -1,0 +1,2 @@
+# stellarbot
+Discord Bot Project

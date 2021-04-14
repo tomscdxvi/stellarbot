@@ -10,7 +10,7 @@ const prefix = '-'
   
 const fs = require('fs');
 
-const token = 'NzU1OTEwMzUwMjk3MzY2NjM4.X2KKXw.RqDnzbpZAZB_DOf8S8G9lnkeK8A';
+const token = ;
 
 var version = '1.2'
 

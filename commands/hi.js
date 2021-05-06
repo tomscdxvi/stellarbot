@@ -1,9 +1,9 @@
-module.exports =  {
+module.exports =  
+{
     name: 'hi',
-    description: "this is a hi command",
-    execute(message, args){
-        message.channel.send('hello celena');
-        
-
-        }
+    description: "This is a simple conversation command",
+    execute(message, args)
+    {
+        message.channel.send('Hello');
     }
+}

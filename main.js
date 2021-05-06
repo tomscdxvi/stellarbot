@@ -84,7 +84,7 @@ client.once('disconnect', () => {
                 };
         
         if(!serverQueue) {
-            const queueContruct = {
+            const queueConstruct = {
                 textChannel: message.channel,
                 connection: null,
                 songs: [],
@@ -92,14 +92,14 @@ client.once('disconnect', () => {
                 playing: true,
         };
 
-            queue.set(message.guild.id, queueContruct);
+            queue.set(message.guild.id, queueConstruct);
 
-            queueContruct.songs.push(song);
+            queueConstruct.songs.push(song);
 
             try {
                 var connection = await voice.channel.join();
-                queueContruct.connection = connection;
-                play(message.guild, queueContruct.songs[0]);
+                queueConstruct.connection = connection;
+                play(message.guild, queueConstruct.songs[0]);
             } catch (err) {
                 console.log(err);
                 queue.delete(message.guild.id);
@@ -129,7 +129,8 @@ client.once('disconnect', () => {
             dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
             serverQueue.textChannel.send(`Playing: [${song.title}]`);
         
-            function skip(message, serverQueue) {
+            function skip(message, serverQueue) 
+            {
                 if(!message.member.voice.channel)
                     return message.channel.send(
                         "StellarBot has to be on for this command to work"
@@ -139,13 +140,42 @@ client.once('disconnect', () => {
                 serverQueue.connection.dispatcher.end();
             }
 
-            function stop(message, serverQueue) {
+            function stop(message, serverQueue) 
+            {
                 if(!message.member.voice.channel)
                     return message.channel.send(
                         "StellarBot has to be on for this command to work"
                     );
                 serverQueue.songs = [];
                 serverQueue.connection.dispatcher.end();
-            }           
+            }
+            
+            if (command.cooldown)
+            {
+                if(!cooldowns.has(command.name))
+                {
+                    cooldowns.set(command.name, new Discord.Collection());
+                }
+
+                const current_time = Date.now();
+                const time_stamps = cooldowns.get(command.name);
+                const cooldown_amount = (command.cooldown) * 1000;
+
+                if (time_stamps.has(message.author.id))
+                {
+                    const expiration_time = times_stamps.get(message.author.id) + cooldown_amount;
+                    
+                    if (current_time < expiration_time)
+                    {
+                        const time_left = (expiration_time = current_time) / 1000;
+
+                        return message.reply('Please wait' + time_left.toFixed(1) + ' more seconds before using ' + command.name);
+                    }
+                }
+
+                time_stamps.set(message.author.id, current_time);
+
+                setTimeout(() => time_stamps.delete(message.author.id), cooldown_amount);
+            }
         }
     client.login(token);

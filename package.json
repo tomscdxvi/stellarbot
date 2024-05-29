@@ -4,15 +4,13 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "start": "nodemon main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "toms",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.3.1",
-    "ffmpeg": "0.0.4",
-    "fluent-ffmpeg": "^2.1.2",
-    "yt-search": "^2.8.0",
-    "ytdl-core": "^3.2.2"
+    "discord.js": "^14.15.2",
+    "dotenv": "^16.4.5"
   }
 }

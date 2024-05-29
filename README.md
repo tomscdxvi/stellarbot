@@ -5,4 +5,4 @@ UPDATE (2021/05/05)
 
 The bot can currently connect to a discord server with your specialized discord token. 
 
-Currenly has 2 commands as well as music commands (Fixing a problem with playing music currently)
+Currently has 2 commands as well as music commands (Fixing a problem with playing music currently)

@@ -1,8 +1,9 @@
 
-const { Client, IntentsBitField, Collection } = require('discord.js');
-const fs = require('fs');
+const { Client, IntentsBitField, Guild } = require('discord.js');
+const { CommandKit } = require('commandkit');
+const mongoose = require('mongoose');
+const path = require('path');
 require('dotenv').config();
-
 
 const client = new Client({
     intents: [
@@ -13,34 +14,22 @@ const client = new Client({
     ],
 });
 
-const prefix = '-'
-
-const token = process.env.DISCORD_AUTH_TOKEN;
-
-var version = '1.2'
-
-var servers = {};
-
-client.commands = new Collection();
-
-const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
-
-for(const file of commandFiles){
-    const command = require(`./commands/${file}`);
-
-    client.commands.set(command.name, command);
-} 
-
-client.once('ready', (c) => {
-    console.log(`${c.user.tag} is now online!`);
+new CommandKit({
+    client,
+    eventsPath: path.join(__dirname, 'events'),
+    commandsPath: path.join(__dirname, 'commands'),
 });
 
-client.once('reconnecting',() => {
-    console.log('Reconnecting StellarBot');
-});
 
-client.once('disconnect', () => {
-    console.log('Disconnecting StellarBot');
-});
+(async () => {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected to Database!");
 
-client.login(token);
+    /* 
+    // Automatically set client commands to empty and CommandKit will refresh.
+    client.on('ready', () => {
+        client.application.commands.set([]);
+    }); */
+
+    client.login(process.env.DISCORD_AUTH_TOKEN);
+})();

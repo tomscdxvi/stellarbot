@@ -15,7 +15,8 @@ module.exports = {
         if(!interaction.inGuild()) {
             interaction.reply({
                 content: "This command can only be executed inside a server",
-                ephemeral: true
+                ephemeral: true,
+                thinking: true
             });
             return;
         };
@@ -45,8 +46,9 @@ module.exports = {
             const chance = generateRandomNumber(0, 100);
 
             if(chance < 80) {
-                await interaction.editReply(`You did not get to double your balance this time!`);
 
+                await interaction.editReply(`You did not get to double your balance this time!`);
+            
                 cooldown.endsAt = Date.now() + 10_000;
                 await cooldown.save();
 
@@ -64,7 +66,7 @@ module.exports = {
 
             await Promise.all([ cooldown.save(), user.save() ]);
 
-            interaction.editReply(`Your current balance is ${user.balance}`);
+            interaction.editReply(`Congrats! Your current balance is now ${user.balance}`);
 
         } catch(error) {
             console.log(`Error: ${error}`);

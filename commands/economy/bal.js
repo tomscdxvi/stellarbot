@@ -42,7 +42,7 @@ module.exports = {
 
             await Promise.all([ cooldown.save(), user.save() ]);
 
-            interaction.editReply(`Your current balance is ${user.balance}`);
+            interaction.editReply(`Your current balance is :coin: ${user.balance}`);
         } catch(error) {
             console.log(`Error: ${error}`);
         }

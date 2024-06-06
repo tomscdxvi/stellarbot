@@ -36,6 +36,7 @@ module.exports = {
                 const { default: prettyMs } = await import('pretty-ms');
 
                 interaction.editReply(`You are on a cooldown, please try again after ${prettyMs(cooldown.endsAt - Date.now())}`);
+                
                 return;
             }
             
@@ -45,11 +46,11 @@ module.exports = {
 
             const chance = generateRandomNumber(0, 100);
 
-            if(chance < 80) {
+            if(chance < 87) {
 
                 await interaction.editReply(`You did not get to double your balance this time!`);
             
-                cooldown.endsAt = Date.now() + 10_000;
+                cooldown.endsAt = Date.now() + 3_000;
                 await cooldown.save();
 
                 return;
@@ -62,11 +63,11 @@ module.exports = {
             }
 
             user.balance = double;
-            cooldown.endsAt = Date.now() + 10_000;
+            cooldown.endsAt = Date.now() + 3_000;
 
             await Promise.all([ cooldown.save(), user.save() ]);
 
-            interaction.editReply(`Congrats! Your current balance is now ${user.balance}`);
+            interaction.editReply(`Congrats! Your current balance is now :coin: ${user.balance}`);
 
         } catch(error) {
             console.log(`Error: ${error}`);

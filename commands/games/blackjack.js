@@ -40,6 +40,8 @@ var deck = [];
 var dealerHand = [];
 var playerHand = [];
 var dealerHandValue = 0;
+var playerHandValue = 0;
+var hidden = true;
 
 const generateDeck = () => {
 
@@ -84,6 +86,13 @@ const drawIntoPlayer = () => {
 
     playerHand.push(card);
 
+        // If card.length === 2 (This means the end of the length is equal to 2), that means the number cannot be 10 so we find the value from that condition
+        if(card.length === 2) { 
+            (card[0] === 'J' || card[0] === 'Q' || card[0] === 'K') ? playerHandValue += 10 :  playerHandValue +=  Number(card[0])
+        } else { // This handles the condition if the card is 10, set the value to 10. 
+            playerHandValue += 10;
+        } 
+
     return playerHand;
 }
 
@@ -117,7 +126,11 @@ const exitButton = new ButtonBuilder().setLabel('Exit').setStyle(ButtonStyle.Dan
 
 const introRow = new ActionRowBuilder().addComponents(normalBlackjack, highRollBlackjack, exitButton);
 const betsRow = new ActionRowBuilder().addComponents(lowBet, midBet, topBet);
-const gameRow = new ActionRowBuilder().addComponents(hitButton, standButton, exitButton);
+const gameRow = new ActionRowBuilder().addComponents(hitButton, standButton); 
+
+const timeout = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
 module.exports = {
@@ -137,6 +150,8 @@ module.exports = {
             let user = await User.findOne({
                 userId: interaction.member.id
             });
+
+            interaction.editReply("Currently disabled for maintenance...")
             
             if(user.balance < 1000) {
                 interaction.editReply("You do not have enough to play (1000 coins)");
@@ -144,11 +159,11 @@ module.exports = {
                 return;
             }
             
-            interaction.editReply({ content: 'Choose your stakes', components: [introRow] });
+           // interaction.editReply({ content: 'Choose your stakes', components: [introRow] });
 
             const collector = interaction.channel.createMessageComponentCollector({
                 componentType: ComponentType.Button,
-                time: 3500
+                time: 60000
             });
 
             collector.on('collect', async (interaction) => {
@@ -173,11 +188,34 @@ module.exports = {
                             user.balance = bet;
 
                             await user.save();
-    
-                            drawIntoDealer();
-    
-                            interaction.editReply({ content: `${dealerHand} and ${dealerHandValue}`, components: [] });
 
+                            interaction.editReply({ content: `Bets are in...`, components: [] });
+
+                            drawIntoPlayer();
+                            drawIntoDealer();
+
+                            drawIntoPlayer();
+                            drawIntoDealer();
+                            
+                            await timeout(3000)
+
+                            interaction.editReply({ content: `Dealer: *, ${dealerHand[1]}| Player: ${playerHand[0]}, ${playerHand[1]}`, components: [gameRow] });
+                            
+                            collector.on('collect', async (interaction) => {
+                                if(interaction.customId === 'hit-button') {
+                                    await interaction.deferUpdate();
+            
+                                    // drawIntoPlayer();
+                                    
+                                    /*
+                                    for(let i = 0; i < playerHand.length; i++) {
+                                        interaction.editReply({ content: `Player: Player: ${playerHand[0]}, ${playerHand[1]}`, components: [] });
+                                    } */
+
+                                    interaction.editReply({ content: `HELLO!`, components: [] });
+                                }
+                                
+                            }); 
                         }
     
                         if(interaction.customId === 'mid-button') {
@@ -227,6 +265,7 @@ module.exports = {
                     return interaction.editReply({ content: 'Closing table...', components: [] });
                 }
             });
+            
 
         } catch(error) {
             console.log(`An error has occurred with the error: ${error}`)

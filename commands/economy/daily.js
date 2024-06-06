@@ -1,6 +1,15 @@
 const User = require('../../schemas/User');
 
 const dailyAmount = 500;
+const double = dailyAmount * 2;
+
+// Generate a random number between x and y.
+const generateRandomNumber = (x, y) => {
+    const range = y - x + 1;
+    const randomNumber = Math.floor(Math.random() * range);
+    
+    return randomNumber + x;
+}
 
 module.exports = {
 
@@ -34,12 +43,28 @@ module.exports = {
                 });
             }
 
-            user.balance += dailyAmount;
-            user.lastDailyCollected = new Date();
+            const chance = generateRandomNumber(0, 100);
 
-            await user.save();
+            if(chance < 50) {
 
-            interaction.editReply(`${dailyAmount} has been deposited into your account!`);
+                await interaction.editReply(`You did not get to double your daily :coin: this time! :coin: ${dailyAmount} has been deposited into your account!`);
+
+                user.balance += dailyAmount;
+                user.lastDailyCollected = new Date();
+
+                await user.save();
+
+                return;
+            } else {
+                await interaction.editReply(`Congrats! Your daily :coin: has been doubled. :coin: ${double} has been deposited into your account!`);
+
+                user.balance += double;
+                user.lastDailyCollected = new Date();
+
+                await user.save();
+
+                return;
+            }
         } catch(error) {
             console.log(`Error: ${error}`);
         }

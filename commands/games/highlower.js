@@ -140,9 +140,9 @@ module.exports = {
                 return;
             }
 
-            const chance = generateRandomNumber(0, 10);
+            // const chance = generateRandomNumber(0, 10);
             
-            interaction.editReply({ content: `The value of my card is hidden to you, do you think it is higher or lower than ${chance}`, components: [gameRow] });
+            interaction.editReply({ content: `The value of my card is hidden to you, do you think it is higher or lower than 5`, components: [gameRow] });
 
             const collector = interaction.channel.createMessageComponentCollector({
                 componentType: ComponentType.Button,

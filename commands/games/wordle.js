@@ -1,8 +1,10 @@
+/*
 const { EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/User');
 const Cooldown = require('../../schemas/Cooldown');
 
 const words = ["moon", "butt", "human"];
+*/
 
 /*
 function shuffle(array) {
@@ -21,6 +23,7 @@ function shuffle(array) {
 }
 */
 
+/*
 module.exports = {
     run: async({ interaction }) => {
         if(!interaction.inGuild()) {
@@ -53,7 +56,7 @@ module.exports = {
             const word = [words.pop()];
 
             let wordle = new Map();
-            
+
 
             interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors:['time'] })
                 .then(async (collected) => {
@@ -87,3 +90,4 @@ module.exports = {
         'description': 'Play wordle and win some coins!'
     }
 }
+*/

@@ -1,3 +1,4 @@
+const { ActivityType } = require('discord.js');
 const User = require('../../schemas/User');
 require('dotenv').config();
 
@@ -9,6 +10,8 @@ let randomMsg = [``, ``, `Zoinks`,]
 module.exports = (c) => {
 
     console.log(`${c.user.tag} is now online!`);
+
+    c.user.setActivity("your coins disappear...", { type: ActivityType.Watching});
 
     /*
     setInterval(() => { 

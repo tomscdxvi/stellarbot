@@ -33,7 +33,7 @@ module.exports = {
             // Find the index for the user initializing the command by filtering through all members and find the one that equals member.userId === id.
             const memberIndex = members.findIndex((member) => member.userId === id); 
 
-            embed.setFooter({ text: `${username}, you are ranked #${memberIndex + 1} with ${balance} :coin:`});
+            embed.setFooter({ text: `${username}, you are ranked #${memberIndex + 1} with ${balance}!`});
 
             const topFive = members.slice(0, 5);
 
@@ -46,7 +46,7 @@ module.exports = {
 
                 let userBalance = topFive[i].balance.toLocaleString();
 
-                desc += `**${ i + 1}. ${user.username}** ${userBalance} :coin:\n`;
+                desc += `**${ i + 1}. ${user.username}** :coin: ${userBalance}\n`;
             }
 
             if(desc !== "") {

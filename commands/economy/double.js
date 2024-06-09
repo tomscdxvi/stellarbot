@@ -54,7 +54,7 @@ module.exports = {
                 await cooldown.save();
 
                 return;
-            }
+            } 
 
             const double = user.balance * 2;
 

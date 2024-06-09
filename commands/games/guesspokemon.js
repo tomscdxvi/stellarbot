@@ -27,14 +27,6 @@ module.exports = {
             
             let cooldown = await Cooldown.findOne({ userId, commandName });
 
-            const percentage = ((25 / 100) * user.balance);
-
-            if(user.balance < percentage || user.balance == NULL) {
-                interaction.editReply(`You do not have enough to play (${percentage.toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 })})`);
-
-                return;
-            }
-
             if (cooldown && Date.now() < cooldown.endsAt) {
                 const { default: prettyMs } = await import('pretty-ms');
 
@@ -63,32 +55,26 @@ module.exports = {
 
                     interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors:['time'] })
                         .then(collected => {
-                            
-                            const amount = percentage;
-                            const bet = user.balance - amount;
-                            user.balance = bet;
-
                             fetch(options)
                                 .then(res => res.json())
                                 .then(async (data) => {
                                     if(collected.first().content == (data.name)){
 
-                                        user.balance += amount * 2;
                                         cooldown.endsAt = Date.now() + 10_000;
+                                        await Promise.all([ cooldown.save() ]);
 
-                                        await Promise.all([ cooldown.save(), user.save() ]);
-
-                                        interaction.channel.send(`Correct! The name of the pokemon was ${data.name}. ${amount * 2} :coin: has been added into your account!`);
+                                        interaction.channel.send(`Correct! The name of the pokemon was ${data.name}...`);
                 
                                     } else {
-                                        interaction.channel.send("Not that one!");
-
+                                        const { default: prettyMs } = await import('pretty-ms');
                                         cooldown.endsAt = Date.now() + 10_000;
                                         await cooldown.save();
+
+                                        interaction.channel.send(`Wrong! Try another one in ${prettyMs(cooldown.endsAt - Date.now())}`);
                                     }
                         })
                     }).catch(async () => {
-                        await interaction.editReply({ content:`You did not guess in time, you lost :coin: ${percentage.toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 })}`, embeds: []});
+                        await interaction.editReply({ content:`You did not guess in time...`, embeds: []});
 
                         cooldown.endsAt = Date.now() + 5_000;
                         await cooldown.save();
@@ -99,7 +85,7 @@ module.exports = {
                 user = new User({ userId });
             }
 
-            await Promise.all([ cooldown.save(), user.save() ]);
+            await Promise.all([ cooldown.save() ]);
 
         } catch(error) {
             console.log(`Error: ${error}`);

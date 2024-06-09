@@ -121,8 +121,9 @@ module.exports = {
                 userId: interaction.member.id
             });
 
-            const percentage = ((10 / 100) * user.balance).toFixed(0);
-            const totalInString = ((10 / 100) * user.balance).toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 });
+            const percent = interaction.options.getInteger('percent');
+            const percentage = ((percent / 100) * user.balance).toFixed(0);
+            const totalInString = ((percent / 100) * user.balance).toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 });
 
             
             // interaction.editReply("Currently disabled for maintenance...");
@@ -146,7 +147,7 @@ module.exports = {
                 return;
             }
             
-            const chance = generateRandomNumber(2, 8);
+            const chance = generateRandomNumber(2, 10);
             
             interaction.editReply({ content: `The value of my card is hidden to you, do you think it is higher or lower than ${chance}`, components: [gameRow] });
 
@@ -261,6 +262,16 @@ module.exports = {
     },
     data: {
         name: 'highlower',
-        'description': 'Play higher or lower against the bot.'
+        'description': 'Play higher or lower against the bot.',
+        options: [
+            {
+                name: 'percent',
+                'description': 'Set the percentage of coins based on your total balance you want to bet',
+                minValue: 10,
+                maxValue: 100,
+                required: true,
+                type: 4
+            }
+        ]
     }
 }

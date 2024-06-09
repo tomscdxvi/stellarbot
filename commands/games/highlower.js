@@ -121,6 +121,12 @@ module.exports = {
                 userId: interaction.member.id
             });
 
+            const percentage = ((10 / 100) * user.balance).toFixed(0);
+            const totalInString = ((10 / 100) * user.balance).toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 });
+
+            
+            // interaction.editReply("Currently disabled for maintenance...");
+
             let cooldown = await Cooldown.findOne({ userId, commandName });
 
             if (cooldown && Date.now() < cooldown.endsAt) {
@@ -134,15 +140,15 @@ module.exports = {
                 cooldown = new Cooldown({ userId, commandName });
             }
             
-            if(user.balance < 1000) {
-                interaction.editReply("You do not have enough to play (1000 coins)");
+            if(user.balance < percentage) {
+                interaction.editReply(`You do not have enough to play ${percentage} `);
 
                 return;
             }
-
-            // const chance = generateRandomNumber(0, 10);
             
-            interaction.editReply({ content: `The value of my card is hidden to you, do you think it is higher or lower than 5`, components: [gameRow] });
+            const chance = generateRandomNumber(2, 8);
+            
+            interaction.editReply({ content: `The value of my card is hidden to you, do you think it is higher or lower than ${chance}`, components: [gameRow] });
 
             const collector = interaction.channel.createMessageComponentCollector({
                 componentType: ComponentType.Button,
@@ -156,15 +162,16 @@ module.exports = {
                 // Generate deck at the start of the command.
                 generateDeck();
 
-                if(interaction.member.id != interaction.user.id) {
-                    return interaction.editReply("You do not have permission to play in this game...WYD!");
-                }
+                /*
+                if (!interaction.customId.endsWith(interaction.user.id)) {
+                    interaction.channel.send(`You cannot click within this event...`);
+                } */
 
                 if(interaction.customId === 'higher-button') {
                     await interaction.deferUpdate();
                     
                     drawIntoDealer();
-                    const amount = 1000;
+                    const amount = percentage;
                     const bet = user.balance - amount;
                     user.balance = bet;
 
@@ -173,6 +180,15 @@ module.exports = {
                     interaction.editReply({ content: `Calculating...`, components: [] });
                
                     await timeout(3000);
+
+                    if(dealerHandValue === chance) {
+                        user.balance += amount;
+                        cooldown.endsAt = Date.now() + 10_000;
+
+                        await Promise.all([ cooldown.save(), user.save() ]);
+
+                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, it was a tie! :coin: ${totalInString} has been added back into your balance.`, components: [] });
+                    }
 
                     if(dealerHandValue > chance) {
                         
@@ -181,7 +197,7 @@ module.exports = {
 
                         await Promise.all([ cooldown.save(), user.save() ]);
 
-                        await interaction.editReply({ content: `You won! :coin: 2000 has been added into your balance.`, components: [] });
+                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, you won! :coin: ${totalInString} has been added into your balance.`, components: [] });
 
                         collector.stop();
                         
@@ -190,7 +206,7 @@ module.exports = {
                         cooldown.endsAt = Date.now() + 10_000;
                         await cooldown.save();
 
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: 1000.`, components: [] });
+                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: ${totalInString}.`, components: [] });
                         collector.stop();
                     }
                 }
@@ -199,7 +215,7 @@ module.exports = {
                     await interaction.deferUpdate();
 
                     drawIntoDealer();
-                    const amount = 1000;
+                    const amount = percentage;
                     const bet = user.balance - amount;
                     user.balance = bet;
 
@@ -209,6 +225,15 @@ module.exports = {
                
                     await timeout(3000);
 
+                    if(dealerHandValue === chance) {
+                        user.balance += amount;
+                        cooldown.endsAt = Date.now() + 10_000;
+
+                        await Promise.all([ cooldown.save(), user.save() ]);
+
+                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, it was a tie! :coin: ${totalInString} has been added back into your balance.`, components: [] });
+                    }
+
                     if(dealerHandValue < chance) {
                         
                         user.balance += amount * 2;
@@ -216,7 +241,7 @@ module.exports = {
 
                         await Promise.all([ cooldown.save(), user.save() ]);
 
-                        await interaction.editReply({ content: `You won! :coin: 2000 has been added into your balance.`, components: [] });
+                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, you won! :coin: ${totalInString} has been added into your balance.`, components: [] });
 
                         collector.stop();
                         
@@ -225,7 +250,7 @@ module.exports = {
                         cooldown.endsAt = Date.now() + 10_000;
                         await cooldown.save();
 
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: 1000.`, components: [] });
+                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: ${totalInString}.`, components: [] });
                         collector.stop();
                     }
                 }

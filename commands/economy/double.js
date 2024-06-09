@@ -46,11 +46,11 @@ module.exports = {
 
             const chance = generateRandomNumber(0, 100);
 
-            if(chance < 87) {
+            if(chance < 95) {
 
                 await interaction.editReply(`You did not get to double your balance this time!`);
             
-                cooldown.endsAt = Date.now() + 3_000;
+                cooldown.endsAt = Date.now() + 5_000;
                 await cooldown.save();
 
                 return;
@@ -63,11 +63,11 @@ module.exports = {
             }
 
             user.balance = double;
-            cooldown.endsAt = Date.now() + 3_000;
+            cooldown.endsAt = Date.now() + 5_000;
 
             await Promise.all([ cooldown.save(), user.save() ]);
 
-            interaction.editReply(`Congrats! Your current balance is now :coin: ${user.balance}`);
+            interaction.editReply(`Congrats! Your current balance is now :coin: ${user.balance.toLocaleString()}`);
 
         } catch(error) {
             console.log(`Error: ${error}`);

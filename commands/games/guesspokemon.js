@@ -27,8 +27,10 @@ module.exports = {
             
             let cooldown = await Cooldown.findOne({ userId, commandName });
 
-            if(user.balance < 1000) {
-                interaction.editReply("You do not have enough to play (1000 coins)");
+            const percentage = ((25 / 100) * user.balance);
+
+            if(user.balance < percentage || user.balance == NULL) {
+                interaction.editReply(`You do not have enough to play (${percentage.toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 })})`);
 
                 return;
             }
@@ -61,23 +63,32 @@ module.exports = {
 
                     interaction.channel.awaitMessages({ filter, max: 1, time: 30000, errors:['time'] })
                         .then(collected => {
+                            
+                            const amount = percentage;
+                            const bet = user.balance - amount;
+                            user.balance = bet;
+
                             fetch(options)
                                 .then(res => res.json())
                                 .then(async (data) => {
                                     if(collected.first().content == (data.name)){
-                                        interaction.channel.send(`Correct! The name of the pokemon was ${data.name}.`);
 
-                                        cooldown.endsAt = Date.now() + 5_000;
-                                        await cooldown.save();
+                                        user.balance += amount * 2;
+                                        cooldown.endsAt = Date.now() + 10_000;
+
+                                        await Promise.all([ cooldown.save(), user.save() ]);
+
+                                        interaction.channel.send(`Correct! The name of the pokemon was ${data.name}. ${amount * 2} :coin: has been added into your account!`);
+                
                                     } else {
                                         interaction.channel.send("Not that one!");
 
-                                        cooldown.endsAt = Date.now() + 5_000;
+                                        cooldown.endsAt = Date.now() + 10_000;
                                         await cooldown.save();
                                     }
                         })
                     }).catch(async () => {
-                        await interaction.editReply({ content:'You did not guess in time!', embeds: []});
+                        await interaction.editReply({ content:`You did not guess in time, you lost :coin: ${percentage.toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 })}`, embeds: []});
 
                         cooldown.endsAt = Date.now() + 5_000;
                         await cooldown.save();

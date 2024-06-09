@@ -152,14 +152,16 @@ module.exports = {
             });
 
             interaction.editReply("Currently disabled for maintenance...")
-            
-            if(user.balance < 1000) {
-                interaction.editReply("You do not have enough to play (1000 coins)");
+            var percentage = 10;
+            const betAmount = ((percentage / 100) * user.balance).toFixed(0);
+
+            if(user.balance < betAmount) {
+                interaction.editReply(`You do not have enough to play (${betAmount})`);
 
                 return;
             }
             
-           // interaction.editReply({ content: 'Choose your stakes', components: [introRow] });
+            // interaction.editReply({ content: 'Choose your stakes', components: [introRow] });
 
             const collector = interaction.channel.createMessageComponentCollector({
                 componentType: ComponentType.Button,
@@ -183,8 +185,8 @@ module.exports = {
                         if(interaction.customId === 'low-button') {
                             await interaction.deferUpdate();
 
-                            const amount = 150;
-                            const bet = user.balance - amount;
+                            percentage = 10;
+                            const bet = user.balance - betAmount;
                             user.balance = bet;
 
                             await user.save();
@@ -198,6 +200,10 @@ module.exports = {
                             drawIntoDealer();
                             
                             await timeout(3000)
+
+                            if(playerHandValue === 21) {
+                                interaction.editReply({ content: `Dealer: *, ${dealerHand[1]}| Player: ${playerHand[0]}, ${playerHand[1]} | Blackjack, you win!`, components: [gameRow] });
+                            }
 
                             interaction.editReply({ content: `Dealer: *, ${dealerHand[1]}| Player: ${playerHand[0]}, ${playerHand[1]}`, components: [gameRow] });
                             

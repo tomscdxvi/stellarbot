@@ -14,6 +14,7 @@ module.exports = {
         try {
             const user = interaction.options.getUser('user');
             const tipAmount = interaction.options.getInteger('amount');
+            const userId = interaction.user.id;
             let interactionUser = await User.findOne({
                 userId: interaction.member.id
             });

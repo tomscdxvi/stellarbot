@@ -43,7 +43,7 @@ module.exports = {
                 .then(res => res.json())
                 .then(async data => {
                     let embed = new EmbedBuilder()
-                        .setTitle("Guess the name of this pokemon in 30 seconds to earn coins!")
+                        .setTitle("Guess the name of this pokemon in 30 seconds!")
                         .setDescription(`What is the name of this pokemon? (In lowercase)`)
                         .setThumbnail(data.sprites.front_default)
                         .setFooter({ text: `StellarBot` })

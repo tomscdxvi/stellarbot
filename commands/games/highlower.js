@@ -125,7 +125,6 @@ module.exports = {
             const percentage = ((percent / 100) * user.balance).toFixed(0);
             const totalInString = ((percent / 100) * user.balance).toLocaleString(undefined, { 'minimumFractionDigits': 0,'maximumFractionDigits': 0 });
 
-            
             // interaction.editReply("Currently disabled for maintenance...");
 
             let cooldown = await Cooldown.findOne({ userId, commandName });
@@ -163,96 +162,104 @@ module.exports = {
                 // Generate deck at the start of the command.
                 generateDeck();
 
-                /*
-                if (!interaction.customId.endsWith(interaction.user.id)) {
-                    interaction.channel.send(`You cannot click within this event...`);
-                } */
 
                 if(interaction.customId === 'higher-button') {
-                    await interaction.deferUpdate();
-                    
-                    drawIntoDealer();
-                    const amount = percentage;
-                    const bet = user.balance - amount;
-                    user.balance = bet;
+                    if (interaction.user != interaction.member) {
+                        await interaction.deferReply({ ephemeral: true });
 
-                    await user.save();
-
-                    interaction.editReply({ content: `Calculating...`, components: [] });
-               
-                    await timeout(3000);
-
-                    if(dealerHandValue === chance) {
-                        user.balance += amount;
-                        cooldown.endsAt = Date.now() + 10_000;
-
-                        await Promise.all([ cooldown.save(), user.save() ]);
-
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, it was a tie! :coin: ${totalInString} has been added back into your balance.`, components: [] });
-                    }
-
-                    if(dealerHandValue > chance) {
-                        
-                        user.balance += amount * 2;
-                        cooldown.endsAt = Date.now() + 10_000;
-
-                        await Promise.all([ cooldown.save(), user.save() ]);
-
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, you won! :coin: ${totalInString} has been added into your balance.`, components: [] });
-
-                        collector.stop();
-                        
+                        return await interaction.editReply(`You cannot click within this event...`);
                     } else {
-
-                        cooldown.endsAt = Date.now() + 10_000;
-                        await cooldown.save();
-
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: ${totalInString}.`, components: [] });
-                        collector.stop();
+                        await interaction.deferUpdate();
+                    
+                        drawIntoDealer();
+                        const amount = percentage;
+                        const bet = user.balance - amount;
+                        user.balance = bet;
+    
+                        await user.save();
+    
+                        interaction.editReply({ content: `Calculating...`, components: [] });
+                   
+                        await timeout(3000);
+    
+                        if(dealerHandValue === chance) {
+                            user.balance += amount;
+                            cooldown.endsAt = Date.now() + 10_000;
+    
+                            await Promise.all([ cooldown.save(), user.save() ]);
+    
+                            await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, it was a tie! :coin: ${totalInString} has been added back into your balance.`, components: [] });
+                        }
+    
+                        if(dealerHandValue > chance) {
+                            
+                            user.balance += amount * 2;
+                            cooldown.endsAt = Date.now() + 10_000;
+    
+                            await Promise.all([ cooldown.save(), user.save() ]);
+    
+                            await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, you won! :coin: ${totalInString} has been added into your balance.`, components: [] });
+    
+                            collector.stop();
+                            
+                        } else {
+    
+                            cooldown.endsAt = Date.now() + 10_000;
+                            await cooldown.save();
+    
+                            await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: ${totalInString}.`, components: [] });
+                            collector.stop();
+                        }
                     }
                 }
 
                 if(interaction.customId === 'lower-button') {
-                    await interaction.deferUpdate();
+                    if (interaction.user != interaction.member) {
+                        await interaction.deferReply({ ephemeral: true });
 
-                    drawIntoDealer();
-                    const amount = percentage;
-                    const bet = user.balance - amount;
-                    user.balance = bet;
-
-                    await user.save();
-
-                    interaction.editReply({ content: `Calculating...`, components: [] });
-               
-                    await timeout(3000);
-
-                    if(dealerHandValue === chance) {
-                        user.balance += amount;
-                        cooldown.endsAt = Date.now() + 10_000;
-
-                        await Promise.all([ cooldown.save(), user.save() ]);
-
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, it was a tie! :coin: ${totalInString} has been added back into your balance.`, components: [] });
-                    }
-
-                    if(dealerHandValue < chance) {
-                        
-                        user.balance += amount * 2;
-                        cooldown.endsAt = Date.now() + 10_000;
-
-                        await Promise.all([ cooldown.save(), user.save() ]);
-
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, you won! :coin: ${totalInString} has been added into your balance.`, components: [] });
-
-                        collector.stop();
-                        
+                        return await interaction.editReply(`You cannot click within this event...`);
                     } else {
+                        await interaction.deferUpdate();
 
-                        cooldown.endsAt = Date.now() + 10_000;
-                        await cooldown.save();
-
-                        await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: ${totalInString}.`, components: [] });
-                        collector.stop();
+                        drawIntoDealer();
+                        const amount = percentage;
+                        const bet = user.balance - amount;
+                        user.balance = bet;
+    
+                        await user.save();
+    
+                        interaction.editReply({ content: `Calculating...`, components: [] });
+                   
+                        await timeout(3000);
+    
+                        if(dealerHandValue === chance) {
+                            user.balance += amount;
+                            cooldown.endsAt = Date.now() + 10_000;
+    
+                            await Promise.all([ cooldown.save(), user.save() ]);
+    
+                            await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, it was a tie! :coin: ${totalInString} has been added back into your balance.`, components: [] });
+                        }
+    
+                        if(dealerHandValue < chance) {
+                            
+                            user.balance += amount * 2;
+                            cooldown.endsAt = Date.now() + 10_000;
+    
+                            await Promise.all([ cooldown.save(), user.save() ]);
+    
+                            await interaction.editReply({ content: `The value of my card was ${dealerHandValue}, you won! :coin: ${totalInString} has been added into your balance.`, components: [] });
+    
+                            collector.stop();
+                            
+                        } else {
+    
+                            cooldown.endsAt = Date.now() + 10_000;
+                            await cooldown.save();
+    
+                            await interaction.editReply({ content: `The value of my card was ${dealerHandValue}. You lost :coin: ${totalInString}.`, components: [] });
+                            collector.stop();
+                        }
                     }
                 }
             });

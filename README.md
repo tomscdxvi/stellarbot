@@ -1,6 +1,11 @@
-# stellarbot
-Discord Bot Project
+# StellarBot
+AI Discord Bot Project
 
-UPDATE (2024/06/09)
+Last Update (2024/06/24)
+
+### Features
+
+1. Coin Currency System w/ Games
+2. AI Inference Integration w/ Groq
 
 

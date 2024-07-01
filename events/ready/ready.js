@@ -2,16 +2,11 @@ const { ActivityType } = require('discord.js');
 const User = require('../../schemas/User');
 require('dotenv').config();
 
-// const random = (min, max) => { return Math.floor(Math.random() * (max - min + 1) + min); }
+module.exports = (client) => {
 
-let randomMsg = [``, ``, `Zoinks`,]
+    console.log(`${client.user.tag} is now online!`);
 
-
-module.exports = (c) => {
-
-    console.log(`${c.user.tag} is now online!`);
-
-    c.user.setActivity("your coins disappear...", { type: ActivityType.Watching});
+    client.user.setActivity("your coins disappear...", { type: ActivityType.Watching});
 
     /*
     setInterval(() => { 

@@ -32,6 +32,9 @@ module.exports = {
             const difficulty = interaction.options.getInteger('difficulty');
             const mainCharacters = [':elf:', ':ninja:'];
             const randomizeMainCharacters = mainCharacters[generateRandomNumber(0, mainCharacters.length - 1)];
+
+            const mobs = [':zombie:', ':goblin:', 't_rex'];
+            const randomizeMobs = mobs[generateRandomNumber(0, mobs.length - 1)];
             
             /*
                 Characters: 
@@ -69,8 +72,6 @@ module.exports = {
                     inline: false
                 }
             )
-            
-
 
             interaction.editReply({ embeds: [embed]}).then(message => {
                 message.react("▶");

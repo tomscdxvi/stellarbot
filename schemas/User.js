@@ -5,6 +5,14 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    accountId: {
+        type: String,
+        required: false
+    },
+    puuid: {
+        type: String,
+        required: false
+    },
     balance: {
         type: Number,
         default: 0

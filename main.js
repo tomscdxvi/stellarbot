@@ -1,4 +1,3 @@
-
 const { Client, IntentsBitField, Guild } = require('discord.js');
 const { CommandKit } = require('commandkit');
 const mongoose = require('mongoose');
@@ -20,11 +19,9 @@ new CommandKit({
     commandsPath: path.join(__dirname, 'commands'),
 });
 
-
 (async () => {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to Database!");
-
+    console.log('Connected to Database!');
 
     // Automatically set client commands to empty and CommandKit will refresh.
     /*
@@ -32,6 +29,6 @@ new CommandKit({
         client.application.commands.set([]);
     }); 
     */
-   
+
     client.login(process.env.DISCORD_AUTH_TOKEN);
 })();

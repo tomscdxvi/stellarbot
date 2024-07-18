@@ -60,7 +60,7 @@ module.exports = {
                     }
                 } else {
                     await interaction.editReply(
-                        'There is an existing summoner associated with your Discord account...'
+                        'There is an existing summoner associated with your Discord account, please contact the support team to update it.'
                     );
                 }
             } else {

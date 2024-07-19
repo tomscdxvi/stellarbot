@@ -29,7 +29,7 @@ module.exports = {
             const embeds = [];
 
             if (user) {
-                if (user.puuid !== null) {
+                if (user.puuid != null) {
                     try {
                         await axios.get(getMatchHistory).then((res) => {
                             for (var i = 0; i < res.data.length; i++) {
@@ -39,7 +39,7 @@ module.exports = {
 
                         // await interaction.editReply(`Here is your most recent match ${matchHistory[0]}`);
                     } catch (error) {
-                        await interaction.editReply('An error has occurred...');
+                        await interaction.editReply('An error has occurred while loading your recent match, please try again');
 
                         console.log(error);
                     }

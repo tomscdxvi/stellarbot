@@ -2,6 +2,7 @@ const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const User = require('../../schemas/User');
 const axios = require('axios');
 const {pagination, ButtonTypes, ButtonStyles} = require('@devraelfreeze/discordjs-pagination');
+const groq = require("../../utils/groqAi");
 require('dotenv').config();
 
 module.exports = {
@@ -62,6 +63,10 @@ module.exports = {
                 .setTitle('**Most Recent TFT Game**')
                 .setColor('Random');
 
+            let embed3 = new EmbedBuilder()
+                .setTitle('**Most Recent TFT Game**')
+                .setColor('Random');
+
             const getMatch = `https://americas.api.riotgames.com/tft/match/v1/matches/${matchHistory[0]}?api_key=${process.env.RIOT_API_KEY}`;
 
             const matchData = {
@@ -69,7 +74,10 @@ module.exports = {
                 level: "",
                 placement: "",
                 traitNames: [],
-                traitUnits: []
+                traitUnits: [],
+                championUnits: [],
+                championRarity: [],
+                championTiers: []
             }
 
             let participantArray = [];
@@ -163,8 +171,32 @@ module.exports = {
                 ${traitDesc}
             `);
 
+
+            // Embed 3
+            for(let i = 0; i < foundParticipant.units.length; i++) {
+                
+                matchData.championUnits.push(foundParticipant.units[i].character_id);
+                matchData.championRarity.push(foundParticipant.units[i].rarity);
+                matchData.championTiers.push(foundParticipant.units[i].tier);
+            }
+
+            let championDesc = '';
+
+            for(let i = 0; i < matchData.championUnits.length; i++) {
+                
+                // (${matchData.championRarity[i]} Cost)
+                championDesc += `**${matchData.championTiers[i]} | ${matchData.championUnits[i].split('_')[1]}** \n`;
+            }
+
+            embed3.setDescription(`
+                **Champion Tiers/Units:**  \n
+
+                ${championDesc}
+            `)
+
             embeds.push(embed1);
             embeds.push(embed2);
+            embeds.push(embed3);
                 
             await pagination({
                 embeds: embeds,
@@ -188,6 +220,46 @@ module.exports = {
                     },
                 ]
             });
+
+            // AI Integration
+            const messages = [
+                { 
+                    role: "system", 
+                    content: `
+                        Help players improve their previous Team Fight Tactics based on their match data.
+                        Always start by saying Let's dive into your most recent TFT match!
+                        Show the Placement that they got.
+                        After, just provide tips and points of improvement based on their most recent game.
+                        At the end, always end off by saying What do you think about these observations and tips? Do you have any specific questions or areas you'd like to focus on in your next match? Let the support team know.`
+                },
+                {
+                    role: "user",
+                    content: `Help me improve from my most recent TFT match based on my most recent match data: ${matchData.placement}, ${matchData.level}, ${matchData.traitNames}, ${matchData.augments}, and ${matchData.championUnits}.`
+                },
+            ];
+
+            const getGroqChatCompletion = () => {
+                return groq.chat.completions.create({
+                    messages: messages,
+                    model: "llama3-8b-8192",
+                    temperature: 0.7,
+                }).catch((error) => {
+                    interaction.editReply("An error has occurred and the AI is currently having trouble with processing the prompt.");
+                    console.log(error);
+                })
+
+            }
+
+            const response = await getGroqChatCompletion();
+
+            const responseText = response.choices[0]?.message?.content;
+            const textLimit = 2000;
+        
+            for (let i = 0; i < responseText.length; i += textLimit) {
+                const chunk = responseText.substring(i, i + textLimit);
+        
+                await interaction.channel.send(chunk || '');
+            }
 
             // embed1.setFooter({ text: `Placement: ${matchData.placement}` });
 

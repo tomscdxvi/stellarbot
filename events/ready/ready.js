@@ -5,9 +5,10 @@ require('dotenv').config();
 module.exports = (client) => {
     console.log(`${client.user.tag} is now online!`);
 
+    /*
     client.user.setActivity('your coins disappear...', {
         type: ActivityType.Watching,
-    });
+    }); */
 
     /*
     setInterval(() => { 

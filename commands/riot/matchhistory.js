@@ -64,7 +64,7 @@ module.exports = {
             let matchHistoryDesc = '';
 
             for(let i = 0; i < historyLimit; i++) {
-                matchHistoryDesc += `${i + 1}: ${matchHistory[i]} \n`;
+                matchHistoryDesc += `${i + 1}: Match Id<**${matchHistory[i]}**> \n`;
             }
 
             embed.setDescription(matchHistoryDesc);

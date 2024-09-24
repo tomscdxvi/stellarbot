@@ -20,6 +20,7 @@ module.exports = {
             await interaction.deferReply();
 
             const userId = interaction.user.id;
+
             let user = await User.findOne({
                 userId: interaction.member.id,
             });
@@ -222,15 +223,15 @@ module.exports = {
                 ]
             });
 
+            /*
             // AI Integration
             const messages = [
                 { 
                     role: "system", 
                     content: `
-                        Help players improve their previous Team Fight Tactics based on their match data.
+                        Show what place the player got in their TFT Game and nothing else.
                         Always start by saying Let's dive into your most recent TFT match!
                         Show the Placement that they got.
-                        Provide insight on the champion units, traits, and augments based on the TFT Set 11.
                         At the end, always end off by saying What do you think about these observations and tips? Do you have any specific questions or areas you'd like to focus on in your next match? Let the support team know.`
                 },
                 {
@@ -256,7 +257,7 @@ module.exports = {
             const responseText = response.choices[0]?.message?.content;
             const textLimit = 2000;
             
-            /*
+            
             for (let i = 0; i < responseText.length; i += textLimit) {
                 const chunk = responseText.substring(i, i + textLimit);
         

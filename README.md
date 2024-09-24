@@ -8,3 +8,4 @@ Last Update (2024/06/24)
 
 1. Coin Currency System w/ Games
 2. AI Inference Integration w/ Groq
+3. Riot Games API Integration

@@ -1,3 +1,5 @@
+/*
+
 const { EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/User');
 const Cooldown = require('../../schemas/Cooldown');
@@ -116,3 +118,5 @@ module.exports = {
         description: 'Guess the name of the random pokemon to win coins!',
     },
 };
+
+*/

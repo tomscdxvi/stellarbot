@@ -1,3 +1,4 @@
+/*
 module.exports = {
     run: async ({ client, interaction }) => {
         if (!interaction.inGuild()) {
@@ -43,3 +44,5 @@ module.exports = {
         }
     }
 }
+
+*/

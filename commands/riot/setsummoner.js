@@ -1,3 +1,5 @@
+/*
+
 const User = require('../../schemas/User');
 const axios = require('axios');
 require('dotenv').config();
@@ -92,3 +94,5 @@ module.exports = {
         ],
     },
 };
+
+*/

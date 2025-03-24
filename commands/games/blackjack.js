@@ -1,3 +1,5 @@
+/*
+
 const {
     ButtonBuilder,
     ButtonStyle,
@@ -7,7 +9,7 @@ const {
 const User = require('../../schemas/User');
 const Cooldown = require('../../schemas/Cooldown');
 
-/* Blackjack game rules
+Blackjack game rules
     52 cards (10, 10, 10, 10) & face cards = J, Q, K (12)
     
     1: Generate and shuffle deck on start
@@ -37,7 +39,7 @@ const Cooldown = require('../../schemas/Cooldown');
         If the player's total == 21, the player wins
         If the player's total > 21, the player loses
 
-*/
+
 
 var suits = ['♠', '♥', '♣', '♦'];
 var ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
@@ -269,7 +271,7 @@ module.exports = {
                                     /*
                                     for(let i = 0; i < playerHand.length; i++) {
                                         interaction.editReply({ content: `Player: Player: ${playerHand[0]}, ${playerHand[1]}`, components: [] });
-                                    } */
+                                    } 
 
                                     interaction.editReply({
                                         content: `HELLO!`,
@@ -342,3 +344,5 @@ module.exports = {
         description: 'Play Blackjack against the bot to win some coins!',
     },
 };
+
+*/

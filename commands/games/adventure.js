@@ -1,3 +1,4 @@
+/* 
 const { EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/User');
 const Cooldown = require('../../schemas/Cooldown');
@@ -40,16 +41,15 @@ module.exports = {
             const randomizeMobs =
                 mobs[generateRandomNumber(0, mobs.length - 1)];
 
-            /*
                 Characters: 
                     Elf ->
                         Move Set: Regular Attack :magic_wand:, Fireball :fire:, Flee :dash:
 
                     Ninja -> 
                         Move Set: 
-            */
+        
 
-            // Game Story Board (Embed Based)
+            Game Story Board (Embed Based)
             let embed = new EmbedBuilder()
                 .setTitle('Building your adventure...')
                 .setFooter({ text: `StellarBot` })
@@ -100,3 +100,5 @@ module.exports = {
         ],
     },
 };
+
+*/

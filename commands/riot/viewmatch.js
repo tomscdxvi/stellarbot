@@ -1,3 +1,5 @@
+/*
+
 const { EmbedBuilder, AttachmentBuilder, ButtonBuilder, ButtonStyle, ActionRow, ActionRowBuilder } = require('discord.js');
 const User = require('../../schemas/User');
 const axios = require('axios');
@@ -106,7 +108,7 @@ module.exports = {
                     
                     matchData.placement = participantArray[i].placement;
                 }
-            } */
+            } 
 
             const foundParticipant = Object.values(participantArray).find(participant => participant.puuid === user.puuid);
 
@@ -262,7 +264,7 @@ module.exports = {
                 const chunk = responseText.substring(i, i + textLimit);
         
                 await interaction.channel.send(chunk || '');
-            } */
+            } 
 
             // embed1.setFooter({ text: `Placement: ${matchData.placement}` });
 
@@ -284,3 +286,5 @@ module.exports = {
         ]
     }
 }
+
+*/

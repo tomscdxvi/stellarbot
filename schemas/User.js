@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, SchemaType } = require('mongoose');
 
 const UserSchema = new Schema(
     {
@@ -14,13 +14,23 @@ const UserSchema = new Schema(
             type: String,
             required: false,
         },
+        pet: {
+            type: Schema.Types.Mixed,
+            required: false,
+        },
+        items: {
+            type: Schema.Types.Mixed,
+            required: false,
+        },
+        /*
         balance: {
             type: Number,
             default: 0,
         },
         lastDailyCollected: {
             type: Date,
-        },
+        },*/
+
     },
     { timestamps: true }
 );

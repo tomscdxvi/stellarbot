@@ -1,3 +1,5 @@
+/*
+
 const fight = require('discord-fight-game');
 
 module.exports = {
@@ -40,3 +42,5 @@ module.exports = {
         ],
     },
 };
+
+*/

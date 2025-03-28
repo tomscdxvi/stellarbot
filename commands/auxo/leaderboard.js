@@ -1,5 +1,3 @@
-/*
-
 const { EmbedBuilder } = require('discord.js');
 const User = require('../../schemas/User');
 
@@ -17,18 +15,23 @@ module.exports = {
             await interaction.deferReply();
 
             const { username, id } = interaction.user;
+
             let user = await User.findOne({
                 userId: interaction.member.id,
             });
-            const balance = user.balance.toLocaleString();
+
+            if(!user) {
+                await interaction.editReply("You do not have an account set-up yet, please use /setweight to get started.");
+                return;
+            }
 
             let embed = new EmbedBuilder()
-                .setTitle('**Top 5 Highest Balances Leaderboard**')
+                .setTitle('**Top 5 Highest Ranks Leaderboard**')
                 .setFooter({ text: `You are not ranked yet` })
                 .setColor('#F1C40F');
 
             const members = await User.find() // Find everyone in the database
-                .sort({ balance: -1 }) // Sort the users in the database by the balance - 1 (From highest to lowest)
+                .sort({ rank: -1 }) // Sort the users in the database by the balance - 1 (From highest to lowest)
                 .catch((err) => console.log(err));
 
             // Find the index for the user initializing the command by filtering through all members and find the one that equals member.userId === id.
@@ -37,7 +40,7 @@ module.exports = {
             );
 
             embed.setFooter({
-                text: `${username}, you are ranked #${memberIndex + 1} with ${balance}!`,
+                text: `${username}, you are ranked #${memberIndex + 1}!`,
             });
 
             const topFive = members.slice(0, 5);
@@ -51,9 +54,10 @@ module.exports = {
 
                 if (!user) return;
 
-                let userBalance = topFive[i].balance.toLocaleString();
+                let userRank = topFive[i].rank;
+                let userFP = topFive[i].fp;
 
-                desc += `**${i + 1}. ${user.username}** :coin: ${userBalance}\n`;
+                desc += `**${i + 1}. ${user.username}** ${userRank} ${userFP}fp\n`;
             }
 
             if (desc !== '') {
@@ -67,8 +71,6 @@ module.exports = {
     },
     data: {
         name: 'leaderboard',
-        description: 'Displays the top 5 balance leaders in the server',
+        description: 'Displays the top 5 rank leaders in the server',
     },
 };
-
-*/

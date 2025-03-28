@@ -1,3 +1,5 @@
+/*
+
 const User = require('../../schemas/User');
 const Cooldown = require('../../schemas/Cooldown');
 
@@ -47,7 +49,7 @@ module.exports = {
 
             const chance = generateRandomNumber(0, 100);
 
-            if (chance < 95) {
+            if (chance > 95) {
                 await interaction.editReply(
                     `You did not get to double your balance this time!`
                 );
@@ -81,3 +83,5 @@ module.exports = {
         description: 'You have a chance to double your balance.',
     },
 };
+
+*/

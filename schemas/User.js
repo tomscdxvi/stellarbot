@@ -14,22 +14,32 @@ const UserSchema = new Schema(
             type: String,
             required: false,
         },
-        pet: {
-            type: Schema.Types.Mixed,
+        rank: {
+            type: String,
+            default: "Bronze",
             required: false,
         },
-        items: {
-            type: Schema.Types.Mixed,
-            required: false,
-        },
-        /*
-        balance: {
+        fp: {
             type: Number,
             default: 0,
+            required: false,
         },
-        lastDailyCollected: {
-            type: Date,
-        },*/
+        workouts: {
+            type: Schema.Types.Mixed,
+            required: false,
+        },
+        weight: {
+            type: Number,
+            required: false,
+        },
+        goal: {
+            type: Number,
+            required: false,
+        },
+        history: {
+            type: Schema.Types.Mixed,
+            required: false,
+        }
 
     },
     { timestamps: true }

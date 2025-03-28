@@ -1,3 +1,4 @@
+/*
 const User = require('../../schemas/User');
 const Cooldown = require('../../schemas/Cooldown');
 
@@ -55,3 +56,5 @@ module.exports = {
         description: 'Display your current balance.',
     },
 };
+
+*/

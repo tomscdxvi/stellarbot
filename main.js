@@ -27,7 +27,7 @@ new CommandKit({
     /*
     client.on('ready', () => {
         client.application.commands.set([]);
-    }); 
+    });  
     */
 
     client.login(process.env.DISCORD_AUTH_TOKEN);

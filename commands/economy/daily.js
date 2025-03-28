@@ -1,3 +1,5 @@
+/*
+
 const User = require('../../schemas/User');
 
 const dailyAmount = 500;
@@ -78,3 +80,5 @@ module.exports = {
         description: 'Collect your daily coins.',
     },
 };
+
+*/

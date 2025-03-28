@@ -1,16 +1,5 @@
 const User = require('../../schemas/User');
 
-const dailyAmount = 500;
-const double = dailyAmount * 2;
-
-// Generate a random number between x and y.
-const generateRandomNumber = (x, y) => {
-    const range = y - x + 1;
-    const randomNumber = Math.floor(Math.random() * range);
-
-    return randomNumber + x;
-};
-
 module.exports = {
     run: async ({ interaction }) => {
         if (!interaction.inGuild()) {
@@ -30,6 +19,14 @@ module.exports = {
 
             const weight = interaction.options.getInteger('weight');
             const goal = interaction.options.getInteger('goal');
+
+            // Validate weight input to ensure it's no greater than 999
+            if (weight > 999 || goal > 999) {
+                await interaction.editReply(
+                    '❌ Your weight and goal must be a number less than or equal to 999.'
+                );
+                return;
+            }
 
             const today = new Date().toLocaleString();
 
